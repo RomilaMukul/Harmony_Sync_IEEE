@@ -1,0 +1,25 @@
+services:
+  mqtt-broker:
+    image: eclipse-mosquitto:2
+    container_name: mosquitto-broker
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: music-sync-postgres
+    environment:
+      POSTGRES_USER: sync_user
+      POSTGRES_PASSWORD: sync_password
+      POSTGRES_DB: music_sync_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:
